@@ -13,8 +13,6 @@ str(rain_all)
 rain_all <- rain_all %>%
   mutate(yr_mth= format(date,"%Y-%m"))
 
-?group_by
-
 monthly_rain <- rain_all %>%
   group_by(index_no,station,yr_mth) %>%
   summarize(month_rain= sum(rainfall_sum)) %>%
@@ -38,3 +36,22 @@ head(yearly_rain)
 View(yearly_rain)
 
 write.csv(yearly_rain, file="complete_yearly_rainfall.csv")
+
+#rainfall graph
+
+yearly_rain$yr <- as.numeric(yearly_rain$yr)
+head(yearly_rain)
+
+yearly_rain %>%
+  ggplot(aes(yr,year_rain, color=station, na.rm=T))+
+  geom_point(size=2)+
+  theme_bw()+
+  geom_smooth(method="lm", se=F)+
+  #yearly_rain$yr <- as.character(yearly_rain$yr)+
+  scale_y_continuous(breaks= c(0,1000,2000,3000,4000,5000,6000))+
+  scale_x_continuous(breaks= c(1990,1995,2000,2005,2010,2015,2020))+
+  scale_color_discrete(name='Weather Stations')+
+  labs(title="Yearly Rainfall", size=10,x= "Year", y="Rainfall (mm)")+
+  facet_wrap(~station)
+
+ggsave("yearly_rainfall_facetwrap.jpg", width=9, height=7)
