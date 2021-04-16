@@ -37,6 +37,13 @@ View(yearly_rain)
 
 write.csv(yearly_rain, file="complete_yearly_rainfall.csv")
 
+#rain in 2017
+yr2017 <- yearly_rain %>%
+  filter(yr==2017)
+head(yr2017)
+
+write.csv(yr2017, file="rainfall_in_2017.csv")
+
 #rainfall graph
 
 yearly_rain$yr <- as.numeric(yearly_rain$yr)
@@ -47,7 +54,6 @@ yearly_rain %>%
   geom_point(size=2)+
   theme_bw()+
   geom_smooth(method="lm", se=F)+
-  #yearly_rain$yr <- as.character(yearly_rain$yr)+
   scale_y_continuous(breaks= c(0,1000,2000,3000,4000,5000,6000))+
   scale_x_continuous(breaks= c(1990,1995,2000,2005,2010,2015,2020))+
   scale_color_discrete(name='Weather Stations')+
